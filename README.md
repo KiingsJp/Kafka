@@ -15,3 +15,6 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic NOME_DO_
 
 --Alterar Topicos (alterando partitions para 3)
 bin/kafka-topics.sh --alter --zookeeper localhost:2181 --topic NOME_DO_TOPICO --partitions 3 
+
+--Listar Grupos
+bin/kafka-consumer-groups.sh --all-groups --bootstrap-server localhost:9092 --describe
