@@ -10,5 +10,11 @@ bin/kafka-server-start.sh config/server.properties
 bin/kafka-topics.sh --list --bootstrap-server localhost:9092
 bin/kafka-topics.sh --describe --bootstrap-server localhost:9092
 
---Ler mensagens
+--Ler mensagens 
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic NOME_DO_TOPICO --from-beginning
+
+--Alterar Topicos (alterando partitions para 3)
+bin/kafka-topics.sh --alter --zookeeper localhost:2181 --topic NOME_DO_TOPICO --partitions 3 
+
+--Listar Grupos
+bin/kafka-consumer-groups.sh --all-groups --bootstrap-server localhost:9092 --describe
