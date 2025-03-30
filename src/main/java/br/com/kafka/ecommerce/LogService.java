@@ -5,7 +5,6 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -19,7 +18,6 @@ public class LogService {
                     var records = consumer.poll(Duration.ofMillis(100));
                     if(!records.isEmpty()) {
                         System.out.println("Records found: " + records.count());
-
                         records.forEach(record -> {
                             System.out.println("------------------------------");
                             System.out.println("LOG data:");
@@ -28,12 +26,6 @@ public class LogService {
                             System.out.println("Value: " + record.value());
                             System.out.println("OffSet: " + record.offset());
                             System.out.println("Partition: " + record.partition());
-
-                            try {
-                                Thread.sleep(5000);
-                            } catch (InterruptedException e) {
-                                System.out.println("Interrupted while waiting for record");
-                            }
                         });
                     }
                 } catch (Exception e) {
