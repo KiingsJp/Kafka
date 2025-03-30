@@ -1,5 +1,3 @@
-package br.com.kafka.ecommerce;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -17,7 +15,9 @@ public class GsonDeserializer<T> implements Deserializer<T> {
     public void configure(Map<String, ?> configs, boolean isKey) {
         String typeName = String.valueOf(configs.get(TYPE_CONFIG));
         try {
-            this.type = (Class<T>) Class.forName(typeName);
+            @SuppressWarnings("unchecked")
+            Class<T> clazz = (Class<T>) Class.forName(typeName);
+            this.type = clazz;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Type for deserialization does not exist in the classpath." ,e);
         }

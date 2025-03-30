@@ -1,5 +1,3 @@
-package br.com.kafka.ecommerce;
-
 import java.math.BigDecimal;
 
 public class Order {
