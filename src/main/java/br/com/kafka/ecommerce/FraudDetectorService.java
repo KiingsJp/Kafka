@@ -2,27 +2,38 @@ package br.com.kafka.ecommerce;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import java.util.Map;
+
 public class FraudDetectorService {
+
     public static void main(String[] args) {
         var fraudService = new FraudDetectorService();
-
-        try(var kafkaService = new KafkaService("ECOMMERCE_NEW_ORDER", fraudService::parse, FraudDetectorService.class.getSimpleName())) {
-            kafkaService.run();
+        try (
+                var service = new KafkaService<>(
+                        FraudDetectorService.class.getSimpleName(),
+                        "ECOMMERCE_NEW_ORDER",
+                        fraudService::parse,
+                        Order.class,
+                        Map.of()
+                )
+        ) {
+            service.run();
         }
     }
 
-    private void parse(ConsumerRecord<String, String> record) {
-        System.out.println("------------------------------");
-        System.out.println("New Order data:");
-        System.out.println("Key: " + record.key());
-        System.out.println("Value: " + record.value());
-        System.out.println("OffSet: " + record.offset());
-        System.out.println("Partition: " + record.partition());
-
+    private void parse(ConsumerRecord<String, Order> record) {
+        System.out.println("------------------------------------------");
+        System.out.println("Processing new order, checking for fraud");
+        System.out.println(record.key());
+        System.out.println(record.value());
+        System.out.println(record.partition());
+        System.out.println(record.offset());
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
-            System.out.println("Interrupted while waiting for record");
+            System.out.println(e.getMessage());
         }
+        System.out.println("Order processed");
     }
+
 }
