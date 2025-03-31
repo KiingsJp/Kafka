@@ -35,10 +35,10 @@ public class FraudDetectorService {
             var order = record.value();
             if (order.amount().compareTo(new BigDecimal(4000)) >= 0 ) {
                 System.out.println("Fraud Detected!!!!");
-                orderDispatcher.send("ECOMMERCE_ORDER_REJECTED", order.userId(), order);
+                orderDispatcher.send("ECOMMERCE_ORDER_REJECTED", order.email(), order);
             } else {
                 System.out.println("Approved!");
-                orderDispatcher.send("ECOMMERCE_ORDER_APPROVED", order.userId(), order);
+                orderDispatcher.send("ECOMMERCE_ORDER_APPROVED", order.email(), order);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
