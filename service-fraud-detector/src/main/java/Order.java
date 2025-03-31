@@ -1,13 +1,12 @@
 import java.math.BigDecimal;
 
-public class Order {
-
-    String userId, orderId;
-    BigDecimal amount;
-
-    public Order(String userId, String orderId, BigDecimal amount) {
-        this.userId = userId;
-        this.orderId = orderId;
-        this.amount = amount;
+public record Order(String userId, String orderId, BigDecimal amount) {
+    @Override
+    public String toString() {
+        return "Order{" +
+                "userId='" + userId + '\'' +
+                ", orderId='" + orderId + '\'' +
+                ", amount=" + amount +
+                '}';
     }
 }
