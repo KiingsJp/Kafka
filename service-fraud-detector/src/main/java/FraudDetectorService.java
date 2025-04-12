@@ -22,7 +22,7 @@ public class FraudDetectorService {
         }
     }
 
-    private void parse(ConsumerRecord<String, Order> record) {
+    private void parse(ConsumerRecord<String, Message<Order>> record) {
         System.out.println("------------------------------------------");
         System.out.println("Processing new order, checking for fraud");
         System.out.println(record.key());
@@ -32,7 +32,7 @@ public class FraudDetectorService {
         try {
             Thread.sleep(2000);
 
-            var order = record.value();
+            var order = record.value().payload();
             if (order.amount().compareTo(new BigDecimal(4000)) >= 0 ) {
                 System.out.println("Fraud Detected!!!!");
                 orderDispatcher.send("ECOMMERCE_ORDER_REJECTED", order.email(), order);

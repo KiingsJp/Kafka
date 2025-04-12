@@ -38,12 +38,14 @@ public class CreateUserService {
         }
     }
 
-    private void parse(ConsumerRecord<String, Order> record) {
+    private void parse(ConsumerRecord<String, Message<Order>> record) {
+        var message = record.value();
         System.out.println("------------------------------------------");
         System.out.println("Processing new order, checking for new user");
         System.out.println(record.value());
+
         try {
-            var order = record.value();
+            var order = message.payload();
             if(isNewUser(order.email())) {
                 insertNewUser(order.email());
             }

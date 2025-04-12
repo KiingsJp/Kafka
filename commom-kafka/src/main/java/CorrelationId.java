@@ -1,0 +1,16 @@
+import java.util.UUID;
+
+public class CorrelationId {
+    private final String  id;
+
+    CorrelationId(String title) {
+        id = title + "("  + UUID.randomUUID() + ")";
+    }
+
+    @Override
+    public String toString() {
+        return "CorrelationId{" +
+                "id='" + id + '\'' +
+                '}';
+    }
+}

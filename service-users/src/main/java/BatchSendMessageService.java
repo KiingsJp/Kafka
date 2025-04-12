@@ -40,13 +40,14 @@ public class BatchSendMessageService {
         }
     }
 
-    private void parse(ConsumerRecord<String, String> record) {
+    private void parse(ConsumerRecord<String, Message<String>> record) {
+        var message = record.value();
         System.out.println("------------------------------------------");
         System.out.println("Processing new batch");
-        System.out.println("Topic: " + record.value());
+        System.out.println("Topic: " + message.payload());
         try {
             for (User user : getAllUser()){
-                userDispatcher.send(record.value(), user.uuid(), user);
+                userDispatcher.send(message.payload(), user.uuid(), user);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
