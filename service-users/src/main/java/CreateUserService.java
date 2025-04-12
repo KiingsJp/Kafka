@@ -45,7 +45,9 @@ public class CreateUserService {
         System.out.println(record.value());
 
         try {
+//            deleteAllUsers();
             var order = message.payload();
+            System.out.println(order.email());
             if(isNewUser(order.email())) {
                 insertNewUser(order.email());
             }
@@ -58,6 +60,7 @@ public class CreateUserService {
         var exists = this.connection.prepareStatement("select * from Users where email = ?");
         exists.setString(1, email);
         var result = exists.executeQuery();
+        System.out.println(!result.isBeforeFirst());
         return !result.isBeforeFirst();
     }
 
@@ -67,5 +70,11 @@ public class CreateUserService {
         insert.setString(2, email);
         insert.execute();
         System.out.println("Inserted new user: " + email);
+    }
+
+    private void deleteAllUsers() throws SQLException {
+        var insert = connection.prepareStatement("delete from Users");
+        insert.execute();
+        System.out.println("Users deleted");
     }
 }

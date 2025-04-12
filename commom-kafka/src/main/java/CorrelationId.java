@@ -13,4 +13,8 @@ public class CorrelationId {
                 "id='" + id + '\'' +
                 '}';
     }
+
+    public CorrelationId continueWith(String title){
+        return new CorrelationId(id + "-" + title);
+    }
 }

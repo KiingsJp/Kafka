@@ -33,12 +33,13 @@ public class FraudDetectorService {
             Thread.sleep(2000);
 
             var order = record.value().payload();
+            var correlationId = record.value().id().continueWith(FraudDetectorService.class.getSimpleName());
             if (order.amount().compareTo(new BigDecimal(4000)) >= 0 ) {
                 System.out.println("Fraud Detected!!!!");
-                orderDispatcher.send("ECOMMERCE_ORDER_REJECTED", order.email(), order);
+                orderDispatcher.send("ECOMMERCE_ORDER_REJECTED", order.email(), order, correlationId);
             } else {
                 System.out.println("Approved!");
-                orderDispatcher.send("ECOMMERCE_ORDER_APPROVED", order.email(), order);
+                orderDispatcher.send("ECOMMERCE_ORDER_APPROVED", order.email(), order, correlationId);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

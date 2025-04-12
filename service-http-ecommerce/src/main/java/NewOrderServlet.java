@@ -27,8 +27,8 @@ public class NewOrderServlet extends HttpServlet {
         try {
             var emailCode = "Thank you for your order! We are processing your order!";
 
-            orderDispatcher.send("ECOMMERCE_NEW_ORDER", email, order);
-            emailDispatcher.send("ECOMMERCE_SEND_EMAIL", email, emailCode);
+            orderDispatcher.send("ECOMMERCE_NEW_ORDER", email, order, new CorrelationId(NewOrderServlet.class.getSimpleName()));
+            emailDispatcher.send("ECOMMERCE_SEND_EMAIL", email, emailCode, new CorrelationId(NewOrderServlet.class.getSimpleName()));
 
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);

@@ -30,7 +30,7 @@ public class BatchSendMessageService {
         try (
                 var service = new KafkaService<>(
                         BatchSendMessageService.class.getSimpleName(),
-                        "SEND_MESSAGE_TO_ALL_USERS",
+                        "ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS",
                         batchSendMessageService::parse,
                         String.class,
                         Map.of()
@@ -47,7 +47,8 @@ public class BatchSendMessageService {
         System.out.println("Topic: " + message.payload());
         try {
             for (User user : getAllUser()){
-                userDispatcher.send(message.payload(), user.uuid(), user);
+                var correlationId = record.value().id().continueWith(BatchSendMessageService.class.getSimpleName());
+                userDispatcher.send(message.payload(), user.uuid(), user, correlationId);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
