@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class BatchSendMessageService {
 
@@ -25,14 +26,13 @@ public class BatchSendMessageService {
 
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ExecutionException, InterruptedException {
         var batchSendMessageService = new BatchSendMessageService();
         try (
                 var service = new KafkaService<>(
                         BatchSendMessageService.class.getSimpleName(),
                         "ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS",
                         batchSendMessageService::parse,
-                        String.class,
                         Map.of()
                 )
         ) {
@@ -45,10 +45,11 @@ public class BatchSendMessageService {
         System.out.println("------------------------------------------");
         System.out.println("Processing new batch");
         System.out.println("Topic: " + message.payload());
+//        if(true) throw new RuntimeException("meu erro aquii");
         try {
             for (User user : getAllUser()){
                 var correlationId = record.value().id().continueWith(BatchSendMessageService.class.getSimpleName());
-                userDispatcher.send(message.payload(), user.uuid(), user, correlationId);
+                userDispatcher.sendAsync(message.payload(), user.uuid(), user, correlationId);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
